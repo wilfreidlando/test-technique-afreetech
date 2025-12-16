@@ -1,0 +1,62 @@
+
+services:
+  intia_app_db:
+    image: mariadb:10.7
+    container_name: intia_app_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: secret
+      MYSQL_USER: user
+      MYSQL_DATABASE: intia_app_db
+    volumes:
+      - intia_app_db_data_dev:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - mynetwork
+
+
+  intia_app:
+    build:
+      context: ./
+    image: intia_app
+    container_name: intia_app
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - intia_app_storage_dev:/var/www/storage/app
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      DB_HOST: intia_app_db
+      DB_PORT: 3306
+      DB_DATABASE: intia_app_db
+      DB_USERNAME: user
+      DB_PASSWORD: secret
+    depends_on:
+      - intia_app_db
+    networks:
+      - mynetwork
+
+  helptowin_webserver:
+    image: nginx:alpine
+    container_name: helptowin_webserver_dev
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/local:/etc/nginx/conf.d/
+      - ./:/var/www
+      - helptowin_app_storage_dev:/var/www/storage/app
+    networks:
+      - mynetwork
+
+volumes:
+  intia_app_db_data_dev: {}
+  intia_app_storage_dev: {}
+
+networks:
+  mynetwork:
+    external: true
