@@ -7,5 +7,16 @@ Pour installer et lancer le projet, il suffit d'exécuter la commande suivante d
 ```bash
 docker compose up --bluid -d
 ```
+pour lancer le front sans docker utiliser 
+
+```bash
+npm start
+```
+pour le backend
+```bash
+php artisan serve
+
+php artisan migrate --seed
+```
 
 Assurez-vous d'avoir Docker et Docker Compose installés sur votre machine.
