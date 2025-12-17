@@ -40,16 +40,16 @@ services:
     networks:
       - mynetwork
 
-  helptowin_webserver:
+  intia_app_webserver:
     image: nginx:alpine
-    container_name: helptowin_webserver_dev
+    container_name: intia_app_webserver
     restart: unless-stopped
     ports:
       - "8080:80"
     volumes:
       - ./nginx/local:/etc/nginx/conf.d/
       - ./:/var/www
-      - helptowin_app_storage_dev:/var/www/storage/app
+      - intia_app_storage_dev:/var/www/storage/app
     networks:
       - mynetwork
 
